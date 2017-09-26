@@ -78,12 +78,9 @@ public class BST {
      * @param name1 is the name of the node
      * @param x1  is the x coordinate
      * @param y1  is the y coordinate
-     * @param w1  is the width
-     * @param h1  is the height
      */
-    public void setRootNode(String name1, double x1, double y1,
-            double w1, double h1) {
-        root = new TreeNode(name1, x1, y1, w1, h1);
+    public void setRootNode(String name1, double x1, double y1) {
+        root = new TreeNode(name1, x1, y1);
     };
 
     /**
@@ -108,12 +105,9 @@ public class BST {
      * @param n1  is the name of the node
      * @param x1  is the x coordinate
      * @param y1  is the y coordinate
-     * @param w1  is the width
-     * @param h1  is the height
      */
-    public void setTempNode(String n1, double x1, double y1,
-            double w1, double h1) {
-        temp = new TreeNode(n1, x1, y1, w1, h1);
+    public void setTempNode(String n1, double x1, double y1) {
+        temp = new TreeNode(n1, x1, y1);
     };
 
     /**
@@ -185,13 +179,11 @@ public class BST {
      * removes a single node that contains the following name from the BST.
      * @param x   the starting x-coordinate
      * @param y   the starting y coordinate
-     * @param w   the width of the rectangle
-     * @param h   the height of the rectangle
      * @return boolean true if the rectangle was found and removed
      */
-    public boolean remove(double x, double y, double w, double h) {
+    public boolean remove(double x, double y) {
         removeSuccess = false;
-        setRootNode(removeByCoordinates(root, x, y, w, h));
+        setRootNode(removeByCoordinates(root, x, y));
         if (root != null && root.getName() == null) {
             root = null;
         }
@@ -204,15 +196,11 @@ public class BST {
      * @param t   is the TreeNode to compare
      * @param x   is the x coordinate to compare
      * @param y   is the y coordinate to compare
-     * @param w   is the width to compare
-     * @param h   id the height to compare
      * @return true if all the coordinates, width, and height match t.
      */
-    private boolean isCoordinateMatch(TreeNode t, double x, double y,
-            double w, double h) {
+    private boolean isCoordinateMatch(TreeNode t, double x, double y) {
 
-        return ((t.getX() == x) && (t.getY() == y) 
-                && (t.getH() == h) && (t.getW() == w));
+        return ((t.getX() == x) && (t.getY() == y));
     }
     /////////////////////////////////////////////////////////////////
 
@@ -293,22 +281,17 @@ public class BST {
      *            is the x coordinate to compare
      * @param y
      *            is the y coordinate to compare
-     * @param w
-     *            is the width to compare
-     * @param h
-     *            id the height to compare
      * @return the TreeNode left in that BST location after compared to the
      *         coordinates, height and width.
      */
-    private TreeNode removeByCoordinates(TreeNode rt, double x, double y,
-            double w, double h) {
+    private TreeNode removeByCoordinates(TreeNode rt, double x, double y) {
         if (rt == null) {
             return null;
         }
         //set the leaves of the root given if there is a coordinate match or not
-        if (!isCoordinateMatch(rt, x, y, w, h)) {
-            rt.setLeft(removeByCoordinates(rt.getLeft(), x, y, w, h));
-            rt.setRight(removeByCoordinates(rt.getRight(), x, y, w, h));
+        if (!isCoordinateMatch(rt, x, y)) {
+            rt.setLeft(removeByCoordinates(rt.getLeft(), x, y));
+            rt.setRight(removeByCoordinates(rt.getRight(), x, y));
         } 
         else if (!removeSuccess) { // Found it the first time
             removeSuccess = true;
@@ -339,12 +322,10 @@ public class BST {
             for (int i = 0; i < getTempArray().length; i++) {
                 System.out.print("Rectangle found: ");
                 System.out.printf(
-                    "(%s,%.0f,%.0f,%.0f,%.0f)\n",
+                    "(%s,%.0f,%.0f)\n",
                     name, 
                     getTempArray()[i].getX(),
-                    getTempArray()[i].getY(),
-                    getTempArray()[i].getW(),
-                    getTempArray()[i].getH());
+                    getTempArray()[i].getY());
             } 
         } 
     }
@@ -409,7 +390,7 @@ public class BST {
      *            is the TreeNode instance with the coordinates we want to find
      *            an intersection with
      * @return an array of all TreeNodes that intersect with the given region.
-     */
+     *
     public TreeNode[] regionsearch(TreeNode rt, TreeNode region) {
         if (rt == null) {
             return null;
@@ -447,7 +428,7 @@ public class BST {
         }
 
         return all;
-    }
+    }*/
 
     /**
      * Runs an in-Order traversal of the BST starting at the root.
@@ -477,9 +458,9 @@ public class BST {
             } 
             else {
                 System.out.printf(
-                        "Node has depth %d, Value (%s,%.0f,%.0f,%.0f,%.0f)\n",
+                        "Node has depth %d, Value (%s,%.0f,%.0f)\n",
                         height, rt.getName(),
-                        rt.getX(), rt.getY(), rt.getW(), rt.getH());
+                        rt.getX(), rt.getY());
             }
             count = count + inorderDump(rt.getRight(), height + 1);
             return count + 1;
@@ -493,7 +474,7 @@ public class BST {
     /**
      *
      * @return the string to be printed from intersections
-     */
+     
     public String intersections() {
         String output = "Intersections pairs:\n";
         tempArray = inorderList(root);
@@ -523,13 +504,13 @@ public class BST {
         }
 
     }
-
+*/
     /**
      * return an array of the BST's nodes in order.
      * 
      * @param rt  the root node searched
      * @return the array of TreeNodes
-     */
+     *
     private TreeNode[] inorderList(TreeNode rt) {
         if (rt == null) {
             return null;
@@ -561,7 +542,7 @@ public class BST {
         }
 
         return all;
-    }
+    }*/
 
     //////////////////////////////
     //////////////////////////////
@@ -576,8 +557,6 @@ public class BST {
     class TreeNode {
         private double x;
         private double y;
-        private double w;
-        private double h;
         private String name;
         private TreeNode left;
         private TreeNode right;
@@ -590,8 +569,6 @@ public class BST {
             right = null;
             x = 0;
             y = 0;
-            w = 0;
-            h = 0;
             name = "";
         };
 
@@ -607,8 +584,6 @@ public class BST {
                 right = t.getRight();
                 x = t.getX();
                 y = t.getY();
-                w = t.getW();
-                h = t.getH();
                 name = t.getName();
             }
         }
@@ -619,17 +594,12 @@ public class BST {
          * @param name1 is the name of the TreeNode
          * @param x1  is the x-coordinate
          * @param y1  is the y coordinate
-         * @param w1  is the width
-         * @param h1  is the height
          */
-        public TreeNode(String name1, double x1, double y1,
-                double w1, double h1) {
+        public TreeNode(String name1, double x1, double y1) {
             left = null;
             right = null;
             x = x1;
             y = y1;
-            w = w1;
-            h = h1;
             name = name1;
         };
 
@@ -648,12 +618,9 @@ public class BST {
          * @param name1 is the name of the rectangle
          * @param x1  is the x-coordinate
          * @param y1  is the y coordinate
-         * @param w1  is the width
-         * @param h1  is the height
          */
-        public void setLeft(String name1, double x1, double y1,
-                double w1, double h1) {
-            left = new TreeNode(name1, x1, y1, w1, h1);
+        public void setLeft(String name1, double x1, double y1) {
+            left = new TreeNode(name1, x1, y1);
         };
 
         /**
@@ -672,12 +639,9 @@ public class BST {
          * @param name1 is the name of the rectangle
          * @param x1  is the x-coordinate
          * @param y1  is the y coordinate
-         * @param w1  is the width
-         * @param h1  is the height
          */
-        public void setRight(String name1, double x1, double y1,
-                double w1, double h1) {
-            right = new TreeNode(name1, x1, y1, w1, h1);
+        public void setRight(String name1, double x1, double y1) {
+            right = new TreeNode(name1, x1, y1);
         };
 
         /**
@@ -691,8 +655,6 @@ public class BST {
             }
             x = t.getX();
             y = t.getY();
-            w = t.getW();
-            h = t.getH();
             name = t.getName();
         }
 
@@ -701,15 +663,10 @@ public class BST {
          * @param name1 is the name of the rectangle
          * @param x1  is the x-coordinate
          * @param y1  is the y coordinate
-         * @param w1  is the width
-         * @param h1  is the height
          */
-        public void setValues(String name1, double x1, double y1,
-                double w1, double h1) {
+        public void setValues(String name1, double x1, double y1) {
             x = x1;
             y = y1;
-            w = w1;
-            h = h1;
             name = name1;
         };
 
@@ -721,8 +678,8 @@ public class BST {
          */
         public boolean isValid() {
             return (Character.isLetter(name.charAt(0))
-                    && (h > min) && (w > min) && (x >= min) 
-                    && (y >= min) && ((x + w) <= max) && ((y + h) <= max));
+                    && (x >= min) && (y >= min)
+                    && (x <= max) && (y <= max));
         };
 
         /**
@@ -737,7 +694,7 @@ public class BST {
          * @param t2
          *            is the TreeNode to be compared against
          * @return true if the nodes intersect.
-         */
+         *
         public boolean isNodeInterect(TreeNode t2) {
             double xLow = Math.max(getX(), t2.getX());
             double yLow = Math.max(getY(), t2.getY());
@@ -749,7 +706,7 @@ public class BST {
                     && ((getX() != (t2.getX() + t2.getW())) 
                     || (getY() != (t2.getY() + t2.getH()))));
         }
-
+*/
         // get each component's value in TreeNode
         /**
          * get the base of the left child
@@ -800,19 +757,19 @@ public class BST {
          * get the height of the rectangle
          * 
          * @return the (double) height
-         */
+         *
         public double getH() {
             return h;
-        }
+        }*/
 
         /**
          * get the width of the rectangle
          * 
          * @return the (double) width
-         */
+         *
         public double getW() {
             return w;
-        }
+        }*/
 
     }
 }

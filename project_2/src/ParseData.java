@@ -11,24 +11,16 @@ import java.util.Scanner;
  *The outputs for  the parser go to the output file name provided.
  */
 public class ParseData  {
-    private BST rectTree; //the instance of a BST
+    //private BST rectTree; //the instance of a BST
+    private Data d;
     private Scanner sc; //the scanner for the input file
     /**
-     * x coordinate
+     * returns a pointer to the used instance of the Data class
+     * @return
      */
-    double x;
-    /**
-     * y coordinate
-     */
-    double y;
-    /**
-     * width
-     */
-    double w;
-    /**
-     * height
-     */
-    double h;
+    public Data getData() {
+        return d;
+    }
     
     /**
      * base constructor
@@ -36,7 +28,8 @@ public class ParseData  {
      */
     public ParseData(String filename) {
         //this is just the constructor
-        rectTree = new BST();
+        d = new Data();
+        //rectTree = new BST();
         try {
             sc = new Scanner(new File(filename));
         } 
@@ -51,109 +44,6 @@ public class ParseData  {
         sc.close();
     }
     /**
-     * gets the BST rectTree.
-     * @return the BST implementation for this instance of the class
-     */
-    public BST getBST() {
-        return rectTree;
-    }
-    /**
-     * this is the switch statement that parses the individual
-     * commands.
-     * @param cmd is the argument to parse
-     */
-    public void readCommand(String cmd) {
-        rectTree.setTempNode();
-        switch(cmd) {
-            case "insert" ://Found an insert command
-                String name = sc.next();
-                x = sc.nextDouble();
-                y = sc.nextDouble();
-                w = sc.nextDouble();
-                h = sc.nextDouble();
-                rectTree.setTempNode(name, x, y, w, h);
-                if (rectTree.getTemp().isValid()) {
-                    System.out.print("Rectangle accepted:");
-                    System.out.printf("(%s,%.0f,%.0f,%.0f,%.0f)\n",
-                            name, x, y, w, h);                      
-                    rectTree.setRootNode(rectTree.insert(
-                            rectTree.getRoot(), rectTree.getTemp()));
-                } 
-                else {
-                    System.out.print("Rectangle rejected:");
-                    System.out.printf("(%s,%.0f,%.0f,%.0f,%.0f)\n",
-                            name, x, y, w, h);                      
-                } 
-                break;
-            case "remove" ://Found a remove command
-                if (sc.hasNextDouble()) {
-                    x = sc.nextDouble();
-                    y = sc.nextDouble();
-                    w = sc.nextDouble();
-                    h = sc.nextDouble();                      
-                    if  (!rectTree.remove(x, y, w, h)) {
-                        System.out.print("Rectangle rejected: ");
-                        System.out.printf("(%.0f,%.0f,%.0f,%.0f)\n",
-                                x, y, w, h);                   
-                    } 
-                } 
-                else {
-                    name = sc.next();
-                    if (!rectTree.remove(name)) {
-                        System.out.printf("Rectangle rejected: %s\n",
-                                name);
-                    } 
-                } 
-                break;
-            case "search" : //Found a search command
-                name = sc.next();
-                rectTree.searchTree(name);
-                break;
-            case "regionsearch" : //Found a regional search command
-                x = sc.nextDouble();
-                y = sc.nextDouble();
-                w = sc.nextDouble();
-                h = sc.nextDouble();                      
-                if (h > 0 && w > 0) { //check that parameters are valid
-                    System.out.print("Rectangles intersecting region");
-                    System.out.printf("(%.0f, %.0f, %.0f, %.0f):\n", 
-                            x, y, w, h);
-                    rectTree.setTempNode("temp", x, y, w, h);
-                    rectTree.setTempArray(rectTree.regionsearch(
-                        rectTree.getRoot(), rectTree.getTemp()));
-                    if (rectTree.getTempArray() != null) {
-                        for (int i = 0; 
-                            i < rectTree.getTempArray().length; i++) {
-                            System.out.printf(
-                                "(%s,%.0f,%.0f,%.0f,%.0f)\n",
-                                rectTree.getTempArray()[i].getName(),
-                                rectTree.getTempArray()[i].getX(),
-                                rectTree.getTempArray()[i].getY(),
-                                rectTree.getTempArray()[i].getW(),
-                                rectTree.getTempArray()[i].getH());
-                        } 
-                    } 
-                } 
-                else { //the region search parameters were invalid
-                    System.out.printf(
-                        "Rectangle rejected: (%.0f, %.0f, %.0f, %.0f)\n",
-                        x, y, w, h);
-                }
-                break;
-            case "dump" : //Found a dump command
-                System.out.println("BST dump:");
-                rectTree.treeDump(); //writer
-                break;
-            case "intersections" : //Find intersections command
-                System.out.print(rectTree.intersections());
-                break;
-            default : //Found an unrecognized command
-                System.out.println("Unrecognized input " + cmd);
-                break;
-        } //end switch
-        
-    }
-    /**
      * beginParsing reads and executes the input file commands and runs.
      * @param filename is the name of the input file to parse
      */
@@ -162,7 +52,7 @@ public class ParseData  {
            //Open our file with read/write access
             while (sc.hasNext()) { //While the scanner has information to read
                 String cmd = sc.next(); //Read the next term
-                readCommand(cmd);
+                d.readCommand(cmd);
             } //end while loop
             sc.close();
         } //end try block
@@ -170,6 +60,130 @@ public class ParseData  {
             e.printStackTrace();
         } //end catch block
     } //end beginParsing function
+    /**
+     * This holds the data and tree used to organize it.
+     * A BST and a PR Quad Tree.
+     * @author maden
+     *
+     */
+    private class Data {
+        /**
+         * x coordinate
+         */
+        private double x;
+        /**
+         * y coordinate
+         */
+        private double y;
+        /**
+         * an instantiation of our BST tree
+         */
+        private BST rectTree;
+        //TODO: insert PRQuadTree here
+        /**
+         * base constructor of the Data class
+         */
+        public Data() {
+            rectTree = new BST();
+        }
+        /**
+         * this is the switch statement that parses the individual
+         * commands.
+         * @param cmd is the argument to parse
+         */
+        public void readCommand(String cmd) {
+            rectTree.setTempNode();
+            switch(cmd) {
+                case "insert" ://Found an insert command
+                    String name = sc.next();
+                    x = sc.nextDouble();
+                    y = sc.nextDouble();
+                    rectTree.setTempNode(name, x, y);
+                    if (rectTree.getTemp().isValid()) {
+                        System.out.print("Rectangle accepted:");
+                        System.out.printf("(%s,%.0f,%.0f)\n",
+                                name, x, y);                      
+                        rectTree.setRootNode(rectTree.insert(
+                                rectTree.getRoot(), rectTree.getTemp()));
+                    } 
+                    else {
+                        System.out.print("Rectangle rejected:");
+                        System.out.printf("(%s,%.0f,%.0f)\n",
+                                name, x, y);                      
+                    } 
+                    break;
+                case "remove" ://Found a remove command
+                    if (sc.hasNextDouble()) {
+                        x = sc.nextDouble();
+                        y = sc.nextDouble();
+                        if  (!rectTree.remove(x, y)) {
+                            System.out.print("Rectangle rejected: ");
+                            System.out.printf("(%.0f,%.0f)\n",
+                                    x, y);                   
+                        } 
+                    } 
+                    else {
+                        name = sc.next();
+                        if (!rectTree.remove(name)) {
+                            System.out.printf("Rectangle rejected: %s\n",
+                                    name);
+                        } 
+                    } 
+                    break;
+                case "search" : //Found a search command
+                    name = sc.next();
+                    rectTree.searchTree(name);
+                    break;
+                case "regionsearch" : //Found a regional search command
+                    x = sc.nextDouble();
+                    y = sc.nextDouble();
+                    double h, w;
+                    h = sc.nextDouble();
+                    w = sc.nextDouble();
+                    if (h > 0 && w > 0) { //check that parameters are valid
+                        System.out.print("Rectangles intersecting region");
+                        System.out.printf("(%.0f, %.0f, %.0f, %.0f):\n", 
+                                x, y, w, h);
+                        rectTree.setTempNode("temp", x, y);
+      //                  rectTree.setTempArray(rectTree.regionsearch(
+       //                     rectTree.getRoot(), rectTree.getTemp()));
+                        if (rectTree.getTempArray() != null) {
+                            for (int i = 0; 
+                                i < rectTree.getTempArray().length; i++) {
+                                System.out.printf(
+                                    "(%s,%.0f,%.0f)\n",
+                                    rectTree.getTempArray()[i].getName(),
+                                    rectTree.getTempArray()[i].getX(),
+                                    rectTree.getTempArray()[i].getY());
+                            } 
+                        } 
+                    } 
+                    else { //the region search parameters were invalid
+                        System.out.printf(
+                            "Rectangle rejected: (%.0f, %.0f, %.0f, %.0f)\n",
+                            x, y, w, h);
+                    }
+                    break;
+                case "dump" : //Found a dump command
+                    System.out.println("BST dump:");
+                    rectTree.treeDump(); //writer
+                    break;
+                case "intersections" : //Find intersections command
+    //                System.out.print(rectTree.intersections());
+                    break;
+                default : //Found an unrecognized command
+                    System.out.println("Unrecognized input " + cmd);
+                    break;
+            } //end switch
+            
+        }
+        /**
+         * gets the BST rectTree.
+         * @return the BST implementation for this instance of the class
+         */
+        public BST getBST() {
+            return rectTree;
+        }
 
-
+    }  //end of Data class
 } //end of ParseData class
