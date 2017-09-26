@@ -1,0 +1,9 @@
+insert 2rd 1 1 1 1
+insert e 4 3  6  12
+insert g 2  6     124 6
+dump
+remove 4 3  6  12
+regionsearch 0 0 100 100
+dump
+remove g
+dump

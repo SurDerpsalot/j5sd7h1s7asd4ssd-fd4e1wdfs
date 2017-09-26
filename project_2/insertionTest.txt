@@ -1,0 +1,31 @@
+insert 2rd 1 1 1 1
+insert e 4 3  6  12
+insert f 2  5     124 6
+insert g 2  6     124 6
+insert h 2  3     124 6
+insert f 2  7     124 6
+insert c 2  8     125 6
+insert b  4 3  6  11
+insert d  4 3  6  13
+	insert a 1  0  2 4
+dump
+search k
+remove f
+dump
+remove f
+dump
+remove 4 3  6  11
+dump
+remove 2  3     124 6
+dump
+remove 2  8     125 6
+dump
+remove 4 3  6  13
+dump
+remove 1  0  2 4
+dump
+remove 4 3  6  12
+regionsearch 0 0 100 100
+dump
+remove g
+dump
