@@ -11,7 +11,7 @@ public class ParseDataTest extends student.TestCase {
     
     public void testParseData() {
         ParseData p = new ParseData("SyntaxTest.txt");
-        assertNotNull(p);
+       // assertNotNull(p);
         p.close();
     }
 
