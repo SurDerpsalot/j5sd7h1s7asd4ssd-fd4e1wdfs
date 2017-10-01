@@ -72,7 +72,7 @@ public class BSTTest extends student.TestCase {
         assertTrue(newTree.isEmpty());
         newTree.setRootNode("newnode", 1, 2);
         assertFalse(newTree.isEmpty());
-        BST.TreeNode t = newTree.getRoot();
+        TreeNode t = newTree.getRoot();
         assertEquals(t.getName().compareTo("newnode"), 0);
     }
 
@@ -112,7 +112,7 @@ public class BSTTest extends student.TestCase {
         assertNull(newTree.getTemp());
         newTree.setTempNode("tempnode", 1, 2);
         assertNotNull(newTree.getTemp());
-        BST.TreeNode t = newTree.getTemp();
+        TreeNode t = newTree.getTemp();
         assertEquals(t.getName().compareTo("tempnode"), 0);
     }
 

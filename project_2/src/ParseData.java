@@ -99,7 +99,7 @@ public class ParseData  {
                     x = sc.nextDouble();
                     y = sc.nextDouble();
                     rectTree.setTempNode(name, x, y);
-                    if (rectTree.getTemp().isValid()) {
+                    if (rectTree.isValid(rectTree.getTemp())) {
                         System.out.print("Rectangle accepted:");
                         System.out.printf("(%s,%.0f,%.0f)\n",
                                 name, x, y);                      

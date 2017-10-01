@@ -3,7 +3,7 @@
  * @version 2017-09-19
  *
  */
-public class Rectangle1Test extends student.TestCase {
+public class PointTest extends student.TestCase {
 
     /**
      * Test method for {@link Rectangle1#main(java.lang.String[])}.
