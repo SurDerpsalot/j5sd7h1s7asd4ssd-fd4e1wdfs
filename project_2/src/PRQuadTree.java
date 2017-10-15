@@ -4,7 +4,7 @@
  * dump
  * insert
  * delete
- * @author 
+ * @author m1newc
  * @version 0.1
  *
  */
@@ -34,6 +34,10 @@ public class PRQuadTree {
         root = rt;
     };
 
+    ///////////////////////////////////////////////
+    // Set values
+    ///////////////////////////////////////////////
+    
     /**
      * set the root node with the parameters of 
      * an existing BucketNode. 
@@ -43,7 +47,7 @@ public class PRQuadTree {
         root = new BucketNode(t);
     };
 
-       /**
+    /**
      * set the temp node with the parameters of an existing BucketNode.
      * 
      * @param t is the BucketNode to copy
@@ -61,6 +65,10 @@ public class PRQuadTree {
         tempArray = t;
     };
 
+    ///////////////////////////////////////////////
+    // Get values
+    ///////////////////////////////////////////////
+    
     /**
      * get the pointer to the PRQuadTree's tempArray.
      * 
@@ -69,9 +77,7 @@ public class PRQuadTree {
     public BucketNode[] getTempArray() {
         return tempArray;
     };
-
-    ///////////////////////////////////////////////
-    // Get values
+    
     /**
      * get the value of the PRQuadTree tree's root.
      * 
@@ -89,6 +95,100 @@ public class PRQuadTree {
     public BucketNode getTemp() {
         return temp;
     }
+    
+    ///////////////////////////////////////////////
+    // Modification Functions
+    ///////////////////////////////////////////////
+    
+    /**
+     *  Inserts a point into the PRQuadTree
+     * @param name is the name of the point being inserted
+     * @param x is the x coordinate of the point being inserted
+     * @param y is the y coordinate of the point being inserted
+     */
+    public void insertPoint(String name, double x, double y) {
+    	TreeNode newNode = new TreeNode(name,x,y);
+    	insert(root,newNode);
+    }
+    public void insert(BucketNode rt, TreeNode newNode) {
+    	if(rt.getIsInternalNode())
+    	{
+    		//goes in the NE quadrant
+    		if((newNode.getX()      == (rt.getXMax() / 2) &&
+    				newNode.getY()  == (rt.getYMax() / 2)) || 
+    				(newNode.getX() >  (rt.getXMax() / 2) &&
+    				newNode.getY()  >= (rt.getYMax() / 2)))
+    		{
+    			insert(rt.getNE(), newNode);
+    		}
+    		//goes in the NW quadrant
+    		else if((newNode.getX() == (rt.getXMax() / 2) &&
+    				newNode.getY()  >  (rt.getYMax() / 2)) || 
+    				(newNode.getX() <  (rt.getXMax() / 2) &&
+    				newNode.getY()  >  (rt.getYMax() / 2)))
+    		{
+    			insert(rt.getNW(), newNode);
+    		}
+    		//goes in the SW quadrant
+    		else if((newNode.getX() <  (rt.getXMax() / 2) &&
+    				newNode.getY()  == (rt.getYMax() / 2)) || 
+    				(newNode.getX() <  (rt.getXMax() / 2) &&
+    				newNode.getY()  <  (rt.getYMax() / 2)))
+    		{
+    			insert(rt.getSW(), newNode);
+    		}
+    		//goes in the SE quadrant
+    		else if((newNode.getX() == (rt.getXMax() / 2) &&
+    				newNode.getY()  <  (rt.getYMax() / 2)) || 
+    				(newNode.getX() >  (rt.getXMax() / 2) &&
+    				newNode.getY()  <  (rt.getYMax() / 2)))
+    		{
+    			insert(rt.getSE(), newNode);
+    		}
+    	}
+    	else if(rt.bucketList[1] != null || rt.bucketList[2] != null 
+    			|| rt.bucketList[0] !=null)
+    	{
+    		if(rt.bucketList[0] == null) {
+    			rt.bucketList[0] = newNode;
+    		}
+    		else if(rt.bucketList[1] == null) {
+    			rt.bucketList[1] = newNode;
+    		}
+    		else if(rt.bucketList[2] == null) {
+    			rt.bucketList[2] = newNode;
+    		}
+    	}
+    	else
+    	{
+    		createNewLevel(rt, newNode);
+    	}
+    }
+    /**
+     * 	Takes a full BucketNode and breaks it down to be an internal
+     *  node and create a new level under it containing the original points.
+     * @param rt is the node that needs to be broken down
+     */
+    public void createNewLevel(BucketNode rt, TreeNode newNode) {
+    	rt.isInternalNode = true;
+    	rt.nE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), rt.getYMin(), (rt.getYMax()/2));
+    	rt.nW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), rt.getYMin(), (rt.getYMax()/2));
+    	rt.sW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), (rt.getYMax() / 2), rt.getYMax());
+    	rt.sE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), (rt.getYMax() / 2), rt.getYMax());
+    	insert(rt,rt.bucketList[0]);
+    	insert(rt,rt.bucketList[1]);
+    	insert(rt,rt.bucketList[2]);
+    	insert(rt,newNode);
+    }
+    
+    /**
+     *  Produces an output showing a dump of the QuadTree's information
+     */
+    public void dumpQuadTree() {
+    	//fuck this shit at the moment.
+    }
+    
+    
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
