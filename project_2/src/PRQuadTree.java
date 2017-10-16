@@ -11,10 +11,15 @@
 public class PRQuadTree {
 
      private BucketNode root; //the root of the PRQuadTree
-     private BucketNode temp; //a BucketNode instance accessible from the outside
-     private BucketNode[] tempArray; //an externally accessible array of BucketNodes
+     private BucketNode temp; //a BucketNode instance accessible
+     						  //from the outside
+     private BucketNode[] tempArray; //an externally accessible 
+     								 //array of BucketNodes
      private double min; //minimum value of the coordinate space
      private double max; //maximum value of the coordinate space
+     private double level; //level of the node, used to determine the 
+     					   //indentation of Dump
+     private double nodes; //number of nodes returned from the dump
      private boolean removeSuccess; //global to indicate 'node removal success'
      /**
       * default constructor
@@ -24,6 +29,8 @@ public class PRQuadTree {
          temp = null;
          min = 0;
          max = 1024;
+         level = 0;
+         nodes = 0;
      };
 
     /**
@@ -68,6 +75,14 @@ public class PRQuadTree {
     ///////////////////////////////////////////////
     // Get values
     ///////////////////////////////////////////////
+    /**
+     * returns the number of nodes in the PRQuadTree that
+     * have been dumped
+     * @return nodes
+     */
+    public double getNodes() {
+    	return nodes;
+    }
     
     /**
      * get the pointer to the PRQuadTree's tempArray.
@@ -182,10 +197,65 @@ public class PRQuadTree {
     }
     
     /**
-     *  Produces an output showing a dump of the QuadTree's information
+     * Call this function before the dump function. It resets the indentation
+     * variable as well as a counter
      */
-    public void dumpQuadTree() {
-    	//fuck this shit at the moment.
+    public void preDumpQuadTree() {
+    	level = 0;
+    	nodes = 0;
+    }
+    
+    /**
+     * Produces a dump of the QuadTree's nodes
+     * @param rt is the node being passed in.
+     */
+    public void dumpQuadTree(BucketNode rt) {
+    	for(double i = 0; i < level; i++) {
+    		System.out.print("  ");
+    	}
+    	System.out.print("Node at "+rt.getXMin()+", "+rt.getYMin()+", "
+    			+(rt.getXMin()-rt.getXMax())+": ");
+    	nodes = nodes + 1;
+    	if (rt.getIsInternalNode()) {
+    		System.out.print("Internal\n");
+    		level = level + 1;
+    		dumpQuadTree(rt.getNW());
+    		dumpQuadTree(rt.getNE());
+    		dumpQuadTree(rt.getSW());
+    		dumpQuadTree(rt.getSE());
+    	}
+    	else
+    	{
+    		if(rt.bucketList[0] == null && rt.bucketList[1] == null &&
+    				rt.bucketList[2] == null) {
+    			System.out.print("Empty\n");
+    		}
+    		else
+    		{
+    			if(rt.bucketList[0] !=null)
+    			{
+    				System.out.print("\n");
+    				System.out.print("("+rt.bucketList[0].getName()+", "
+    						+rt.bucketList[0].getX()+", "
+    						+rt.bucketList[0].getY()+")");
+    			}
+    			if(rt.bucketList[1] !=null)
+    			{
+    				System.out.print("\n");
+    				System.out.print("("+rt.bucketList[1].getName()+", "
+    						+rt.bucketList[1].getX()+", "
+    						+rt.bucketList[1].getY()+")");
+    			}
+    			if(rt.bucketList[2] !=null)
+    			{
+    				System.out.print("\n");
+    				System.out.print("("+rt.bucketList[2].getName()+", "
+    						+rt.bucketList[2].getX()+", "
+    						+rt.bucketList[2].getY()+")");
+    			}
+    			System.out.print("\n");
+    		}
+    	}
     }
     
     
