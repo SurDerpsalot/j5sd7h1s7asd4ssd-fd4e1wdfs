@@ -79,12 +79,16 @@ public class ParseData  {
          * an instantiation of our BST tree
          */
         private BST rectTree;
-        //TODO: insert PRQuadTree here
+        /**
+         * an instantiation of our PRQuadTree
+         */
+        private PRQuadTree quadTree;
         /**
          * base constructor of the Data class
          */
         public Data() {
             rectTree = new BST();
+            quadTree = new PRQuadTree();
         }
         /**
          * this is the switch statement that parses the individual
@@ -105,6 +109,7 @@ public class ParseData  {
                                 name, x, y);                      
                         rectTree.setRootNode(rectTree.insert(
                                 rectTree.getRoot(), rectTree.getTemp()));
+                        quadTree.insertPoint(name, x, y);
                     } 
                     else {
                         System.out.print("Rectangle rejected:");
@@ -167,6 +172,11 @@ public class ParseData  {
                 case "dump" : //Found a dump command
                     System.out.println("BST dump:");
                     rectTree.treeDump(); //writer
+                    System.out.println("QuadTree dump:");
+                    quadTree.preDumpQuadTree();
+                    quadTree.dumpQuadTree(quadTree.getRoot());
+                    System.out.println("QuadTree size: "+quadTree.getNodes()+
+                    		" QuadTree Nodes Printed.");
                     break;
                 case "intersections" : //Find intersections command
     //                System.out.print(rectTree.intersections());
