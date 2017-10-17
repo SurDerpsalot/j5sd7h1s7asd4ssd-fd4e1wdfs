@@ -1,10 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * RegionSearch
  * duplicate
- * dump
- * insert
  * delete
  * @author m1newc
  * @version 0.1
@@ -175,13 +172,15 @@ public class PRQuadTree {
     	        //TODO: evoke error condition
     	    }
     		//goes in the NE quadrant
-    	    else if (newNode.getX() >= (rt.getXMax() / 2) &&
-    				newNode.getY()  < (rt.getYMax() / 2))
+    	    else if ((newNode.getX() > (rt.getXMax() / 2) &&
+    				newNode.getY()  <= (rt.getYMax() / 2))||
+    	    		(newNode.getX() == (rt.getXMax() / 2) &&
+    	    		newNode.getY()  == (rt.getYMax() / 2)))
     		{
     			insert(rt.getNE(), newNode);
     		}
     		//goes in the NW quadrant
-            else if (newNode.getX() < (rt.getXMax() / 2) &&
+            else if (newNode.getX() <= (rt.getXMax() / 2) &&
                     newNode.getY()  < (rt.getYMax() / 2))
     		{
     			insert(rt.getNW(), newNode);
@@ -194,7 +193,7 @@ public class PRQuadTree {
     		}
     		//goes in the SE quadrant
             else if (newNode.getX() >= (rt.getXMax() / 2) &&
-                    newNode.getY()  >= (rt.getYMax() / 2))
+                    newNode.getY()  > (rt.getYMax() / 2))
     		{
     			insert(rt.getSE(), newNode);
     		}
@@ -255,8 +254,8 @@ public class PRQuadTree {
     		System.out.print("Internal\n");
     		level = level + 1;
     		dumpQuadTree(rt.getNW());
-    		dumpQuadTree(rt.getSW());
     		dumpQuadTree(rt.getNE());
+    		dumpQuadTree(rt.getSW());
     		dumpQuadTree(rt.getSE());
     		level = level - 1;
     	}
@@ -285,7 +284,79 @@ public class PRQuadTree {
     	}
     }
     
-    
+    public void findDuplicates() {
+    	duplicates(root);    	
+    }
+    /**
+     * Traverses the Tree through all nodes that are not empty and 
+     * compares the points inside for duplication.
+     * @param rt
+     * @return
+     */
+    public void duplicates(BucketNode rt) {
+    	if (rt.isInternalNode) 
+    	{
+    		if(rt.getNE().bucketList.size() > 1 || 
+    		   rt.getNE().getIsInternalNode())
+    		{
+    			duplicates(rt.getNE());
+    		}
+    		if(rt.getNW().bucketList.size() > 1 || 
+    		   rt.getNW().getIsInternalNode())
+    		{
+    			duplicates(rt.getNW());
+    		}
+    		if(rt.getSE().bucketList.size() > 1 || 
+    	       rt.getSE().getIsInternalNode())
+    	    {
+    	    	duplicates(rt.getSE());
+    	    }
+    	    if(rt.getSW().bucketList.size() > 1 || 
+    	       rt.getSW().getIsInternalNode())
+    	    {
+    	        duplicates(rt.getSW());
+    	    }
+    	}
+    	else if(rt.bucketList.size() != 0)
+    	{
+    		//compare the contents of the bucketList to find any duplicates.
+	    	if(rt.bucketList.size() == 3)
+	    	{
+    			if(rt.bucketList.get(0).getX() == rt.bucketList.get(1).getX() 
+    			   &&
+	    		   rt.bucketList.get(0).getY() == rt.bucketList.get(1).getY())
+	    		{
+    				System.out.println("("+rt.bucketList.get(0).getX()+", "
+	    					+rt.bucketList.get(0).getY()+")");
+	    		}
+    			else if(rt.bucketList.get(0).getX() 
+    					== rt.bucketList.get(2).getX() &&
+	    	       rt.bucketList.get(0).getY() == rt.bucketList.get(2).getY())
+	    	    {
+    				System.out.println("("+rt.bucketList.get(0).getX()+", "
+	    					+rt.bucketList.get(0).getY()+")");
+	    	    }
+    			else if(rt.bucketList.get(1).getX()
+    					== rt.bucketList.get(2).getX() &&
+	    	       rt.bucketList.get(1).getY() == rt.bucketList.get(2).getY())
+	    	    {
+    				System.out.println("("+rt.bucketList.get(1).getX()+", "
+	    					+rt.bucketList.get(1).getY()+")");
+	    	    }
+	    	}
+	    	else if(rt.bucketList.size() == 2)
+	    	{
+
+    			if(rt.bucketList.get(0).getX() == rt.bucketList.get(1).getX() 
+    		       &&
+	    		   rt.bucketList.get(0).getY() == rt.bucketList.get(1).getY())
+	    		{
+	    			System.out.println("("+rt.bucketList.get(0).getX()+", "
+	    					+rt.bucketList.get(0).getY()+")");
+	    		}
+	    	}
+    	}
+    }
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -394,10 +465,18 @@ public class PRQuadTree {
         public BucketNode getNE() {
             return nE;
         }
+        /**
+         * 
+         * @return
+         */
         public boolean getIsInternalNode() {
         	return isInternalNode;
         }
-        public ArrayList<TreeNode> getBucket(){
+        /**
+         * 
+         * @return
+         */
+        public ArrayList<TreeNode> getBucket() {
             return bucketList;
         }
 

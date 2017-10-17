@@ -175,8 +175,9 @@ public class ParseData  {
                     System.out.println("QuadTree dump:");
                     quadTree.preDumpQuadTree();
                     break;
-                case "intersections" : //Find intersections command
-    //                System.out.print(rectTree.intersections());
+                case "duplicates" : //Find intersections command
+                    System.out.println("Duplicate Points:");
+                    quadTree.findDuplicates();
                     break;
                 default : //Found an unrecognized command
                     System.out.println("Unrecognized input " + cmd);
