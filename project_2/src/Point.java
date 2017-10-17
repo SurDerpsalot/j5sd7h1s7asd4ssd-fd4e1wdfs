@@ -17,10 +17,6 @@ public class Point {
         String filename = args[0]; //Pass the function a full filepath
         ParseData p = new ParseData(args[0]);
         p.beginParsing(filename);
-        
-        
-        
-        
         p.close();
     }
 }
