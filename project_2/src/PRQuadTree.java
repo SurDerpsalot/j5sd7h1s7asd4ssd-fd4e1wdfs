@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * RegionSearch
  * duplicate
@@ -13,13 +15,13 @@ public class PRQuadTree {
      private BucketNode root; //the root of the PRQuadTree
      private BucketNode temp; //a BucketNode instance accessible
      						  //from the outside
-     private BucketNode[] tempArray; //an externally accessible 
+     private ArrayList<BucketNode> tempArray = new ArrayList<BucketNode>(); //an externally accessible 
      								 //array of BucketNodes
      private double min; //minimum value of the coordinate space
      private double max; //maximum value of the coordinate space
-     private double level; //level of the node, used to determine the 
+     private int level; //level of the node, used to determine the 
      					   //indentation of Dump
-     private double nodes; //number of nodes returned from the dump
+     private int nodes; //number of nodes returned from the dump
      private boolean removeSuccess; //global to indicate 'node removal success'
      /**
       * default constructor
@@ -55,6 +57,18 @@ public class PRQuadTree {
     };
 
     /**
+     * set the root node with the parameters of an existing BucketNode.
+     * 
+     * @param xMin is the minimum value of x
+     * @param xMax is the maximum value of x
+     * @param yMin is the minimum value of y
+     * @param yMay is the maximum value of y
+     */
+    public void setRootNode(double xMin, double xMax, double yMin, double yMax) {
+        temp = new BucketNode(xMin, xMax, yMin, yMax);
+    };
+
+    /**
      * set the temp node with the parameters of an existing BucketNode.
      * 
      * @param t is the BucketNode to copy
@@ -64,14 +78,35 @@ public class PRQuadTree {
     };
 
     /**
+     * set the temp node with the parameters of an existing BucketNode.
+     * 
+     * @param xMin is the minimum value of x
+     * @param xMax is the maximum value of x
+     * @param yMin is the minimum value of y
+     * @param yMay is the maximum value of y
+     */
+    public void setTempNode(double xMin, double xMax, double yMin, double yMax) {
+        temp = new BucketNode(xMin, xMax, yMin, yMax);
+    };
+
+    /**
      * point the temporary array to an existing array of BucketNodes
      * 
      * @param t an array of BucketNodes
      */
-    public void setTempArray(BucketNode[] t) {
-        tempArray = t;
+    public void pushTempArray(BucketNode e) {
+        tempArray.add(e);
     };
 
+  /*  /**
+     * point the temporary array to an existing array of BucketNodes
+     * 
+     * @param t an array of BucketNodes
+     
+    public void setTempArray(ArrayList<BucketNode> t) {
+        tempArray = t;
+    };
+*/
     ///////////////////////////////////////////////
     // Get values
     ///////////////////////////////////////////////
@@ -80,7 +115,7 @@ public class PRQuadTree {
      * have been dumped
      * @return nodes
      */
-    public double getNodes() {
+    public int getNodes() {
     	return nodes;
     }
     
@@ -89,7 +124,7 @@ public class PRQuadTree {
      * 
      * @return tempArray
      */
-    public BucketNode[] getTempArray() {
+    public ArrayList<BucketNode> getTempArray() {
         return tempArray;
     };
     
@@ -122,57 +157,52 @@ public class PRQuadTree {
      * @param y is the y coordinate of the point being inserted
      */
     public void insertPoint(String name, double x, double y) {
-    	TreeNode newNode = new TreeNode(name,x,y);
-    	insert(root,newNode);
+    	TreeNode newNode = new TreeNode(name, x, y);
+    	insert(root, newNode);
     }
+    /**
+     * 
+     * @param rt is the root of the PRQuad tree
+     * @param newNode is the new point element to be added
+     */
     public void insert(BucketNode rt, TreeNode newNode) {
     	if(rt.getIsInternalNode())
     	{
+    	    if (newNode.getX() > rt.getXMax() 
+    	            || newNode.getX() < rt.getXMin()
+    	            || newNode.getY() > rt.getYMax() 
+    	            || newNode.getY() < rt.getYMin()) {
+    	        //TODO: evoke error condition
+    	    }
     		//goes in the NE quadrant
-    		if((newNode.getX()      == (rt.getXMax() / 2) &&
-    				newNode.getY()  == (rt.getYMax() / 2)) || 
-    				(newNode.getX() >  (rt.getXMax() / 2) &&
-    				newNode.getY()  >= (rt.getYMax() / 2)))
+    	    else if (newNode.getX() >= (rt.getXMax() / 2) &&
+    				newNode.getY()  < (rt.getYMax() / 2))
     		{
     			insert(rt.getNE(), newNode);
     		}
     		//goes in the NW quadrant
-    		else if((newNode.getX() == (rt.getXMax() / 2) &&
-    				newNode.getY()  >  (rt.getYMax() / 2)) || 
-    				(newNode.getX() <  (rt.getXMax() / 2) &&
-    				newNode.getY()  >  (rt.getYMax() / 2)))
+            else if (newNode.getX() < (rt.getXMax() / 2) &&
+                    newNode.getY()  < (rt.getYMax() / 2))
     		{
     			insert(rt.getNW(), newNode);
     		}
     		//goes in the SW quadrant
-    		else if((newNode.getX() <  (rt.getXMax() / 2) &&
-    				newNode.getY()  == (rt.getYMax() / 2)) || 
-    				(newNode.getX() <  (rt.getXMax() / 2) &&
-    				newNode.getY()  <  (rt.getYMax() / 2)))
+            else if (newNode.getX() < (rt.getXMax() / 2) &&
+                    newNode.getY()  >= (rt.getYMax() / 2))
     		{
     			insert(rt.getSW(), newNode);
     		}
     		//goes in the SE quadrant
-    		else if((newNode.getX() == (rt.getXMax() / 2) &&
-    				newNode.getY()  <  (rt.getYMax() / 2)) || 
-    				(newNode.getX() >  (rt.getXMax() / 2) &&
-    				newNode.getY()  <  (rt.getYMax() / 2)))
+            else if (newNode.getX() >= (rt.getXMax() / 2) &&
+                    newNode.getY()  >= (rt.getYMax() / 2))
     		{
     			insert(rt.getSE(), newNode);
     		}
     	}
-    	else if(rt.bucketList[1] != null || rt.bucketList[2] != null 
-    			|| rt.bucketList[0] !=null)
+    	else if (rt.bucketList.size() < 3)
     	{
-    		if(rt.bucketList[0] == null) {
-    			rt.bucketList[0] = newNode;
-    		}
-    		else if(rt.bucketList[1] == null) {
-    			rt.bucketList[1] = newNode;
-    		}
-    		else if(rt.bucketList[2] == null) {
-    			rt.bucketList[2] = newNode;
-    		}
+    		rt.bucketList.add(newNode);
+    		
     	}
     	else
     	{
@@ -190,9 +220,10 @@ public class PRQuadTree {
     	rt.nW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), rt.getYMin(), (rt.getYMax()/2));
     	rt.sW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), (rt.getYMax() / 2), rt.getYMax());
     	rt.sE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), (rt.getYMax() / 2), rt.getYMax());
-    	insert(rt,rt.bucketList[0]);
-    	insert(rt,rt.bucketList[1]);
-    	insert(rt,rt.bucketList[2]);
+    	for (int i = rt.bucketList.size() - 1; i >= 0; i--){
+            insert(rt,rt.bucketList.get(i));
+            rt.bucketList.remove(i);
+    	}
     	insert(rt,newNode);
     }
     
@@ -203,6 +234,8 @@ public class PRQuadTree {
     public void preDumpQuadTree() {
     	level = 0;
     	nodes = 0;
+    	dumpQuadTree(root);
+        System.out.print("QuadTree Size: " + nodes + " QuadTree Nodes Printed.");
     }
     
     /**
@@ -213,45 +246,39 @@ public class PRQuadTree {
     	for(double i = 0; i < level; i++) {
     		System.out.print("  ");
     	}
-    	System.out.print("Node at "+rt.getXMin()+", "+rt.getYMin()+", "
-    			+(rt.getXMin()-rt.getXMax())+": ");
+    	System.out.print("Node at " 
+    	        + rt.getXMin() + ", " 
+    	        + rt.getYMin() + ", "
+    	        +(rt.getXMax() - rt.getXMin()) + ": ");
     	nodes = nodes + 1;
     	if (rt.getIsInternalNode()) {
     		System.out.print("Internal\n");
     		level = level + 1;
     		dumpQuadTree(rt.getNW());
-    		dumpQuadTree(rt.getNE());
     		dumpQuadTree(rt.getSW());
+    		dumpQuadTree(rt.getNE());
     		dumpQuadTree(rt.getSE());
+    		level = level - 1;
     	}
     	else
     	{
-    		if(rt.bucketList[0] == null && rt.bucketList[1] == null &&
-    				rt.bucketList[2] == null) {
+    	    int bucketSize = rt.bucketList.size();
+    		if(bucketSize == 0) {
     			System.out.print("Empty\n");
+    		}
+    		else if(bucketSize > 3){
+    		    //ERROR
     		}
     		else
     		{
-    			if(rt.bucketList[0] !=null)
-    			{
+    		    for (int i = 0; i < rt.bucketList.size() ; i++){
     				System.out.print("\n");
-    				System.out.print("("+rt.bucketList[0].getName()+", "
-    						+rt.bucketList[0].getX()+", "
-    						+rt.bucketList[0].getY()+")");
-    			}
-    			if(rt.bucketList[1] !=null)
-    			{
-    				System.out.print("\n");
-    				System.out.print("("+rt.bucketList[1].getName()+", "
-    						+rt.bucketList[1].getX()+", "
-    						+rt.bucketList[1].getY()+")");
-    			}
-    			if(rt.bucketList[2] !=null)
-    			{
-    				System.out.print("\n");
-    				System.out.print("("+rt.bucketList[2].getName()+", "
-    						+rt.bucketList[2].getX()+", "
-    						+rt.bucketList[2].getY()+")");
+                    for(double j = 0; j < level; j++) {
+                        System.out.print("  ");
+                    }
+    				System.out.print("("+rt.bucketList.get(i).getName()+", "
+    						+rt.bucketList.get(i).getX()+", "
+    						+rt.bucketList.get(i).getY()+")");
     			}
     			System.out.print("\n");
     		}
@@ -266,8 +293,8 @@ public class PRQuadTree {
      * 
      * @author 
      */
-    private class BucketNode {
-        private TreeNode [] bucketList = {null, null, null};
+    class BucketNode {
+        private ArrayList<TreeNode> bucketList;
         private BucketNode nE;
         private BucketNode nW;
         private BucketNode sE;
@@ -292,6 +319,7 @@ public class PRQuadTree {
             yMin = minY;
             yMax = maxY;
             isInternalNode = false;
+            bucketList = new ArrayList<TreeNode>();
         }
         
         /**
@@ -369,6 +397,10 @@ public class PRQuadTree {
         public boolean getIsInternalNode() {
         	return isInternalNode;
         }
+        public ArrayList<TreeNode> getBucket(){
+            return bucketList;
+        }
+
     }
         
 }
