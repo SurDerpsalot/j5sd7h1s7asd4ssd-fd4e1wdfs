@@ -174,9 +174,6 @@ public class ParseData  {
                     rectTree.treeDump(); //writer
                     System.out.println("QuadTree dump:");
                     quadTree.preDumpQuadTree();
-                    quadTree.dumpQuadTree(quadTree.getRoot());
-                    System.out.println("QuadTree size: "+quadTree.getNodes()+
-                    		" QuadTree Nodes Printed.");
                     break;
                 case "intersections" : //Find intersections command
     //                System.out.print(rectTree.intersections());
