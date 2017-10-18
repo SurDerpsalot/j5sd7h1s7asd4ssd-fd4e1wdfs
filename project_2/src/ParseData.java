@@ -104,7 +104,7 @@ public class ParseData  {
                     y = sc.nextDouble();
                     rectTree.setTempNode(name, x, y);
                     if (rectTree.isValid(rectTree.getTemp())) {
-                        System.out.print("Rectangle accepted:");
+                        System.out.print("Point accepted: ");
                         System.out.printf("(%s,%.0f,%.0f)\n",
                                 name, x, y);                      
                         rectTree.setRootNode(rectTree.insert(
@@ -112,7 +112,7 @@ public class ParseData  {
                         quadTree.insertPoint(name, x, y);
                     } 
                     else {
-                        System.out.print("Rectangle rejected:");
+                        System.out.print("Point rejected: ");
                         System.out.printf("(%s,%.0f,%.0f)\n",
                                 name, x, y);                      
                     } 
@@ -122,7 +122,7 @@ public class ParseData  {
                         x = sc.nextDouble();
                         y = sc.nextDouble();
                         if  (!rectTree.remove(x, y)) {
-                            System.out.print("Rectangle rejected: ");
+                            System.out.print("Point rejected: ");
                             System.out.printf("(%.0f,%.0f)\n",
                                     x, y);                   
                         } 
@@ -130,7 +130,7 @@ public class ParseData  {
                     else {
                         name = sc.next();
                         if (!rectTree.remove(name)) {
-                            System.out.printf("Rectangle rejected: %s\n",
+                            System.out.printf("Point rejected: %s\n",
                                     name);
                         } 
                     } 
@@ -146,8 +146,8 @@ public class ParseData  {
                     h = sc.nextDouble();
                     w = sc.nextDouble();
                     if (h > 0 && w > 0) { //check that parameters are valid
-                        System.out.print("Rectangles intersecting region");
-                        System.out.printf("(%.0f, %.0f, %.0f, %.0f):\n", 
+                        System.out.print("Points intersecting region: ");
+                        System.out.printf("(%.0f, %.0f, %.0f, %.0f)\n", 
                                 x, y, w, h);
                         rectTree.setTempNode("temp", x, y);
       //                  rectTree.setTempArray(rectTree.regionsearch(
@@ -165,7 +165,7 @@ public class ParseData  {
                     } 
                     else { //the region search parameters were invalid
                         System.out.printf(
-                            "Rectangle rejected: (%.0f, %.0f, %.0f, %.0f)\n",
+                            "Invalid region: (%.0f, %.0f, %.0f, %.0f)\n",
                             x, y, w, h);
                     }
                     break;
