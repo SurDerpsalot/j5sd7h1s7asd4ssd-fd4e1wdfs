@@ -166,7 +166,7 @@ public class PRQuadTree {
                     || newNode.getY() > rt.getYMax() 
                     || newNode.getY() < rt.getYMin()) {
                 //TODO: fixthis
-                }
+            }
             
             
             //goes in the NE quadrant
@@ -433,30 +433,31 @@ public class PRQuadTree {
         }
         return nodesInRegion;
     }
-   /**
-    *     Takes a full BucketNode and breaks it down to be an internal
-    *  node and create a new level under it containing the original points.
-    * @param rt is the node that needs to be broken down
-    */
-   public void createNewLevel(BucketNode rt, TreeNode newNode) {
-       rt.isInternalNode = true;
-       rt.nE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), 
-               rt.getYMin(), (rt.getYMax()/2));
-       rt.nW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), 
-               rt.getYMin(), (rt.getYMax()/2));
-       rt.sW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), 
-               (rt.getYMax() / 2), rt.getYMax());
-       rt.sE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), 
-               (rt.getYMax() / 2), rt.getYMax());      
-       for (int i = rt.bucketList.size() - 1; i >= 0; i--) {
-        for (int j = 0; j < rt.bucketList.get(i).getSize(); j++)
-        {
-            insert(rt,rt.bucketList.get(i).getData(j));
-        }
-        rt.bucketList.remove(i);
+    /**
+     *     Takes a full BucketNode and breaks it down to be an internal
+     *  node and create a new level under it containing the original points.
+     * @param rt is the node that needs to be broken down
+     * @param newNode is the node being inserted into the tree
+     */
+    public void createNewLevel(BucketNode rt, TreeNode newNode) {
+        rt.isInternalNode = true;
+        rt.nE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), 
+                rt.getYMin(), (rt.getYMax() / 2));
+        rt.nW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), 
+                rt.getYMin(), (rt.getYMax() / 2));
+        rt.sW = new BucketNode(rt.getXMin(), (rt.getXMax() / 2), 
+                (rt.getYMax() / 2), rt.getYMax());
+        rt.sE = new BucketNode((rt.getXMax() / 2), rt.getXMax(), 
+                (rt.getYMax() / 2), rt.getYMax());      
+        for (int i = rt.bucketList.size() - 1; i >= 0; i--) {
+            for (int j = 0; j < rt.bucketList.get(i).getSize(); j++)
+            {
+                insert(rt, rt.bucketList.get(i).getData(j));
+            }
+            rt.bucketList.remove(i);
        }
-       insert(rt,newNode);
-   }
+       insert(rt, newNode);
+    }
    
      /**
       * Call this function before the dump function. It resets the indentation
@@ -510,7 +511,7 @@ public class PRQuadTree {
                         System.out.print("\n");
                         for (double k = 0; k < level; k++) {
                             System.out.print("  ");
-                           }
+                        }
                         System.out.print("("
                                 + rt.bucketList.get(i).getData(j).getName()
                                 + ", "
@@ -568,7 +569,7 @@ public class PRQuadTree {
                     System.out.println("("
                             + rt.bucketList.get(i).getData().getX()
                             + ", "
-                            + rt.bucketList.get(i).getData().getY()+ ")");
+                            + rt.bucketList.get(i).getData().getY() + ")");
                 }
             }  
         }
@@ -594,7 +595,11 @@ public class PRQuadTree {
         private boolean isInternalNode;
         
         /**
-         * Basic Constructor
+         * This is the basic constructor
+         * @param minX is the minimum x value
+         * @param maxX is the maximum x value
+         * @param minY is the minimum y value
+         * @param maxY is the maximum y value
          */
         public BucketNode(double minX, double maxX, double minY,
                 double maxY) {
@@ -609,14 +614,10 @@ public class PRQuadTree {
             isInternalNode = false;
             bucketList = new ArrayList<LinkedList>();
         }
-        
-        /*
-         * Copy Constructor
-         */
+
         /**
-         * 
-         * @param t
-         *
+         * This is the copy constructor
+         * @param t the node to be copied
         public BucketNode(BucketNode t) {
             nE = t.getNE();
             nW = t.getNW();
@@ -632,70 +633,70 @@ public class PRQuadTree {
         // Get values
         /**
          * 
-         * @return
+         * @return the minimum x value
          */
         public double getXMin() {
             return xMin;
         }
         /**
          * 
-         * @return
+         * @return the maximum x value
          */
         public double getXMax() {
             return xMax;
         }
         /**
          * 
-         * @return
+         * @return the minimum y value
          */
         public double getYMin() {
             return yMin;
         }
         /**
          * 
-         * @return
+         * @return the maximum y value
          */
         public double getYMax() { 
             return yMax;
         }
         /**
          * 
-         * @return
+         * @return the SW bucketnode
          */
         public BucketNode getSW() {
             return sW;
         }
         /**
          * 
-         * @return
+         * @return the SE bucketnode
          */
         public BucketNode getSE() {
             return sE;
         }
         /**
          * 
-         * @return
+         * @return the NW bucketnode
          */
         public BucketNode getNW() {
             return nW;
         }
         /**
          * 
-         * @return
+         * @return the NE bucketnode
          */
         public BucketNode getNE() {
             return nE;
         }
         /**
          * 
-         * @return
+         * @return if the node is an internal node or not
          */
         public boolean getIsInternalNode() {
             return isInternalNode;
         }
         /**
          * 
-         * @return
+         * @return the arraylist of linkedlists of points in the tree
          */
         public ArrayList<LinkedList> getBucket() {
             return bucketList;
@@ -703,9 +704,9 @@ public class PRQuadTree {
 
     }  
     
-    ////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
     /**
      * These are the supporting nodes to be used in the LinkedList
      * @author 
@@ -713,8 +714,8 @@ public class PRQuadTree {
      */
     class PointNode
     {
-        protected TreeNode data;
-        protected PointNode link;
+        private TreeNode data;
+        private PointNode link;
      
         /**
          * This is the basic constructor of PointNode
@@ -736,7 +737,7 @@ public class PRQuadTree {
         }    
         /**
          * This function sets the link to the next node
-         * @param n the node to be linked to
+         * @param ptr the node to be linked to
          */
         public void setLink(PointNode ptr)
         {
@@ -744,7 +745,7 @@ public class PRQuadTree {
         }    
         /**
          * This function sets the TreeNode in the current node  
-         * @param d the TreeNode to be stored
+         * @param node the TreeNode to be stored
          */
         public void setData(TreeNode node)
         {
@@ -777,9 +778,9 @@ public class PRQuadTree {
      */
     class LinkedList
     {
-        protected PointNode start;
-        protected PointNode end;
-        public int size;
+        private PointNode start;
+        private PointNode end;
+        private int size;
      
         /**
          * This is the basic constructor of the LinkedList
@@ -886,7 +887,7 @@ public class PRQuadTree {
             PointNode ptr = start;
             for (int i = 0; i < find; i++)
             {
-                ptr=ptr.getLink();
+                ptr = ptr.getLink();
             }
             return ptr.getData();
         }
@@ -900,15 +901,15 @@ public class PRQuadTree {
         public int findPoint(String name)
         {
             PointNode ptr = start;
-             for (int i = 0; i < size; i++) 
-             {
-                 if (ptr.data.getName() == name) 
-                 {
-                     return i;
-                 }
-                 ptr = ptr.getLink();
-             }
-             return -1;
+            for (int i = 0; i < size; i++) 
+            {
+                if (ptr.data.getName() == name) 
+                {
+                    return i;
+                }
+                ptr = ptr.getLink();
+            }
+            return -1;
         }
     }
 }
