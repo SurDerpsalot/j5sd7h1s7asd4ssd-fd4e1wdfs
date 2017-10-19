@@ -275,6 +275,8 @@ public class PRQuadTreeTest extends student.TestCase {
         p.insertPoint("NW2", 1.0, 22.0);
         p.insertPoint("NW2", 1.0, 22.0);
         p.insertPoint("NW3", 1.0, 23.0);
+        assertTrue(p.bucketlist.size(), 3);
+        assertTrue(p.bucketlist.get(1).getSize(), 2);
         p.insertPoint("NW4", 1.0, 24.0);
         p.insertPoint("NW", 1.0, 2.0);
         p.insertPoint("NWdupe", 1.0, 2.0);
