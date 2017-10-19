@@ -121,18 +121,27 @@ public class Point  {
                     if (sc.hasNextDouble()) {
                         x = sc.nextDouble();
                         y = sc.nextDouble();
-                        if  (!rectTree.remove(x, y)) {
+                        if (quadTree.deleteSearch(new TreeNode("", x, y))) {
+                            rectTree.remove(quadTree.deletedTreeNode);                            
+                        }
+                        else {
                             System.out.print("Point Rejected: ");
-                            System.out.printf("(%.0f, %.0f)\n",
-                                    x, y);                   
-                        } 
+                            System.out.printf("(%.0f, %.0f)\n", x, y); 
+                        }
+                        
                     } 
                     else {
                         name = sc.next();
-                        if (!rectTree.remove(name)) {
+                        if (rectTree.remove(name)) {
+                            if (!quadTree.deleteSearch(rectTree.deletedNode)) {
+                                System.out.printf("Point Rejected: %s\n",
+                                        name);                                
+                            } 
+                        }
+                        else {
                             System.out.printf("Point Rejected: %s\n",
                                     name);
-                        } 
+                        }
                     } 
                     break;
                 case "search" : //Found a search command
@@ -144,8 +153,8 @@ public class Point  {
                     y = sc.nextDouble();
                     double h;
                     double w;
-                    h = sc.nextDouble();
                     w = sc.nextDouble();
+                    h = sc.nextDouble();
                     if (h > 0 && w > 0) { //check that parameters are valid
                         quadTree.regionSearch(x, x + w, y, y + h);
                     } 

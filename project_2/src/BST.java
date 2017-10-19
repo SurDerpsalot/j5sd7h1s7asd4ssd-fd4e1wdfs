@@ -13,7 +13,10 @@ public class BST {
     private double min; //minimum value of the coordinate space
     private double max; //maximum value of the coordinate space
     private boolean removeSuccess; //global to indicate 'node removal success'
-
+    /**
+     * the laste TreeNode that was deleted;
+     */
+    TreeNode deletedNode;
     /**
      * default constructor
      */
@@ -22,6 +25,7 @@ public class BST {
         temp = null;
         min = 0;
         max = 1024;
+        deletedNode = new TreeNode();
     };
 
     /**
@@ -30,6 +34,7 @@ public class BST {
      */
     public BST(TreeNode rt) {
         root = rt;
+        deletedNode = new TreeNode();
     };
 
     /**
@@ -191,6 +196,20 @@ public class BST {
     }
 
     /**
+     * removes a single node that contains the following value set.
+     * @param deleteNode the node to remove
+     * @return boolean true if the rectangle was found and removed
+     */
+    public boolean remove(TreeNode deleteNode) {
+        removeSuccess = false;
+        setRootNode(removeByNode(root, deleteNode));
+        if (root != null && root.getName() == null) {
+            root = null;
+        }
+        return removeSuccess;
+    }
+
+    /**
      * Identifies if given coordinates match those of the provided TreeNode
      * 
      * @param t   is the TreeNode to compare
@@ -256,6 +275,7 @@ public class BST {
         } 
         else { // Found it
             removeSuccess = true;
+            deletedNode.setValues(name, rt.getX(), rt.getY());
             if (rt.getLeft() == null) {
                 return rt.getRight();
             } 
@@ -304,6 +324,47 @@ public class BST {
             else { // Two children
                 TreeNode temp1 = getmax(rt.getLeft());
                 rt.setValue(temp1);
+                rt.setLeft(deletemax(rt.getLeft()));
+            }
+        }
+        return rt;
+    }
+
+    /**
+     * remove the first TreeNode in the current root's branches that has the
+     * value set specified.
+     * 
+     * @param rt  is the current TreeNode branch
+     * @param name is the String that matches on the TreeNode to be removed
+     * @return the child after removal of the names TreeNode.
+     */
+    private TreeNode removeByNode(TreeNode rt, TreeNode deleteNode) {
+        if (rt == null) { // the TreeNode could not be removed in this section
+            return null;
+        } 
+        else if (rt.getName() == null) { //the treeNode is empty
+            return null;
+        }
+        if (rt.getName().compareTo(deleteNode.getName()) > 0) { 
+            rt.setLeft(removeByNode(rt.getLeft(), deleteNode));
+        } 
+        else if (rt.getName().compareTo(deleteNode.getName()) < 0 ||
+            rt.getX() != deleteNode.getX() || 
+            rt.getY() != deleteNode.getY()) {
+            rt.setRight(removeByNode(rt.getRight(), deleteNode));
+        } 
+        else { // Found it
+            removeSuccess = true;
+            deletedNode.setValues(rt.getName(), rt.getX(), rt.getY());
+            if (rt.getLeft() == null) {
+                return rt.getRight();
+            } 
+            else if (rt.getRight() == null) {
+                return rt.getLeft();
+            } 
+            else { // Two children
+                temp = getmax(rt.getLeft());
+                rt.setValue(temp);
                 rt.setLeft(deletemax(rt.getLeft()));
             }
         }

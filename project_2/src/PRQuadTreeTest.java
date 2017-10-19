@@ -3,7 +3,7 @@
 /**
  * This is a test for our PRQuad Tree class
  * @author m1newc and bfin96
- * @version 1.0
+ *
  */
 public class PRQuadTreeTest extends student.TestCase {
 
@@ -95,7 +95,7 @@ public class PRQuadTreeTest extends student.TestCase {
     /**
      * tests insertion
      */
-    public void testinsertPoint() {
+    public void testinsertPoint(){
         PRQuadTree p = new PRQuadTree();
         assertNotNull(p.getRoot());     
         p.insertPoint("newrootNW", 1.0, 2.0);
@@ -103,42 +103,42 @@ public class PRQuadTreeTest extends student.TestCase {
         p.insertPoint("newrootSW", 2, 552.0);
         assertEquals(p.getRoot().getBucket().size(), 3);
         assertFalse(p.getRoot().getIsInternalNode());
-        assertEquals(p.getRoot().getBucket().get(0).
-                start.getData().getName(), "newrootNW");
-        assertEquals((int)p.getRoot().getBucket().get(0).
-                start.getData().getX(), 1);
-        assertEquals((int)p.getRoot().getBucket().get(0).
-                start.getData().getY(), 2);
-        assertEquals(p.getRoot().getBucket().get(1).
-                start.getData().getName(), "newrootNE");
-        assertEquals((int)p.getRoot().getBucket().get(1).
-                start.getData().getX(), 550);
-        assertEquals((int)p.getRoot().getBucket().get(1).
-                start.getData().getY(), 3);
-        assertEquals(p.getRoot().getBucket().get(2).
-                start.getData().getName(), "newrootSW");
-        assertEquals((int)p.getRoot().getBucket().get(2).
-                start.getData().getX(), 2);
-        assertEquals((int)p.getRoot().getBucket().get(2).
-                start.getData().getY(), 552);
+        assertEquals(p.getRoot().getBucket().get(0)
+                .getData().getName(), "newrootNW");
+        assertEquals((int)p.getRoot().getBucket().get(0)
+                .getData().getX(), 1);
+        assertEquals((int)p.getRoot().getBucket().get(0)
+                .getData().getY(), 2);
+        assertEquals(p.getRoot().getBucket().get(1)
+                .getData().getName(), "newrootNE");
+        assertEquals((int)p.getRoot().getBucket().get(1)
+                .getData().getX(), 550);
+        assertEquals((int)p.getRoot().getBucket().get(1)
+                .getData().getY(), 3);
+        assertEquals(p.getRoot().getBucket().get(2)
+                .getData().getName(), "newrootSW");
+        assertEquals((int)p.getRoot().getBucket().get(2)
+                .getData().getX(), 2);
+        assertEquals((int)p.getRoot().getBucket().get(2)
+                .getData().getY(), 552);
         //creates new children for the PRQuad tree
         p.insertPoint("newrootSE", 550.0, 603.0);
         assertTrue(p.getRoot().getIsInternalNode());
         assertEquals(p.getRoot().getBucket().size(), 0);
         assertEquals(p.getRoot().getNE().getBucket().size(), 1);
-        assertNotNull(p.getRoot().getNE().getBucket().get(0).
-                start.getData().getName());
-        assertEquals(p.getRoot().getNE().getBucket().get(0).
-                start.getData().getName(), "newrootNE");
+        assertNotNull(p.getRoot().getNE().getBucket().get(0)
+                .getData().getName());
+        assertEquals(p.getRoot().getNE().getBucket().get(0)
+                .getData().getName(), "newrootNE");
         assertEquals(p.getRoot().getSE().getBucket().size(), 1);
         assertEquals(p.getRoot().getSE().getBucket().get(0)
-                .start.getData().getName(), "newrootSE");
+                .getData().getName(), "newrootSE");
         assertEquals(p.getRoot().getNW().getBucket().size(), 1);
         assertEquals(p.getRoot().getNW().getBucket().get(0)
-                .start.getData().getName(), "newrootNW");
+                .getData().getName(), "newrootNW");
         assertEquals(p.getRoot().getSW().getBucket().size(), 1);
         assertEquals(p.getRoot().getSW().getBucket().get(0)
-                .start.getData().getName(), "newrootSW");
+                .getData().getName(), "newrootSW");
         assertEquals(p.getRoot().getSE().getBucket().get(0)
                 .getSize(), 1);
         p.insertPoint("newrootSEdupe", 550.0, 603.0);
@@ -147,9 +147,9 @@ public class PRQuadTreeTest extends student.TestCase {
         assertEquals(p.getRoot().getSE().getBucket().get(0)
                 .getSize(), 3);
         assertEquals(p.getRoot().getSE().getBucket().get(0)
-                .start.getData().getName(), "newrootSE");
-        assertEquals(p.getRoot().getSE().getBucket().get(0)
-                .end.getData().getName(), "newrootSEdupe2");
+                .getData().getName(), "newrootSE");
+//        assertEquals(p.getRoot().getSE().getBucket().get(0)
+//                .end.getData().getName(), "newrootSEdupe2");
     }
     /**
      * tests the dump method
@@ -257,10 +257,10 @@ public class PRQuadTreeTest extends student.TestCase {
         assertTrue(p.deleteSearch(t));
         p.preDumpQuadTree();
         assertFalse(p.deleteSearch(t));
-        assertEquals(p.regionSearch(0, 1024, 0, 1024), 19);
+        assertEquals(p.regionSearch(0,1024,0,1024), 19);
         assertTrue(p.deleteSearch(t2));
         assertTrue(p.deleteSearch(t3));
-        assertEquals(p.regionSearch(0, 1024, 0, 1024), 17);
+        assertEquals(p.regionSearch(0,1024,0,1024), 17);
         TreeNode t4 = new TreeNode("NWdupe2", 1.0, 2.0); 
         assertTrue(p.deleteSearch(t4));
         p.duplicates(p.getRoot());
@@ -275,8 +275,6 @@ public class PRQuadTreeTest extends student.TestCase {
         p.insertPoint("NW2", 1.0, 22.0);
         p.insertPoint("NW2", 1.0, 22.0);
         p.insertPoint("NW3", 1.0, 23.0);
-        assertTrue(p.bucketlist.size(), 3);
-        assertTrue(p.bucketlist.get(1).getSize(), 2);
         p.insertPoint("NW4", 1.0, 24.0);
         p.insertPoint("NW", 1.0, 2.0);
         p.insertPoint("NWdupe", 1.0, 2.0);
@@ -296,6 +294,7 @@ public class PRQuadTreeTest extends student.TestCase {
         p.insertPoint("SE3", 552.0, 603.0);
         p.insertPoint("SE2", 552.0, 605.0);
         p.duplicates(p.getRoot());
+ 
     }
     
 }
