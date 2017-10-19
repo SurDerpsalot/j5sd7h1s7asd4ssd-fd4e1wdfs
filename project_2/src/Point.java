@@ -66,7 +66,7 @@ public class Point  {
      * @author maden
      *
      */
-    private class Data {
+    class Data {
         /**
          * x coordinate
          */
@@ -171,13 +171,14 @@ public class Point  {
             } //end switch
             
         }
-        /*
+        /**
          * gets the BST rectTree.
          * @return the BST implementation for this instance of the class
-         *
+         */
         public BST getBST() {
             return rectTree;
-        }*/
+        }
+        
 
     }  //end of Data class
 } //end of ParseData class

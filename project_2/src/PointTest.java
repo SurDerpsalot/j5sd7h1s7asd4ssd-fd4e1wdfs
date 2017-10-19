@@ -11,7 +11,7 @@ public class PointTest extends student.TestCase {
     
     public void testPoint() {
         Point p = new Point("SyntaxTest.txt");
-       // assertNotNull(p);
+        assertNotNull(p);
         p.close();
     }
 
@@ -22,7 +22,7 @@ public class PointTest extends student.TestCase {
     public void testBeginParsing() {
         Point p = new Point("SyntaxTest.txt");
         p.beginParsing("SyntaxTest.txt");
-      //  assertNotNull(p.getData().getBST().getRoot());
+        assertNotNull(p.getData().getBST().getRoot());
         p.close();
     }
     
@@ -31,9 +31,9 @@ public class PointTest extends student.TestCase {
      */
     public void testAllCases() {
         Point p = new Point("SyntaxTest.txt");
-  //      assertTrue(p.getBST().isEmpty());
+        assertTrue(p.getData().getBST().isEmpty());
         p.beginParsing("SyntaxTest.txt");
-      //  assertFalse(p.getBST().isEmpty());
+        assertFalse(p.getData().getBST().isEmpty());
     //    p.readCommand("12");
         p.close();
     }
