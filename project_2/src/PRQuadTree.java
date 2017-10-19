@@ -166,6 +166,7 @@ public class PRQuadTree {
                     || newNode.getY() > rt.getYMax() 
                     || newNode.getY() < rt.getYMin()) {
                 //TODO: fixthis
+            	break;
             }
             
             
@@ -455,8 +456,8 @@ public class PRQuadTree {
                 insert(rt, rt.bucketList.get(i).getData(j));
             }
             rt.bucketList.remove(i);
-       }
-       insert(rt, newNode);
+        }
+        insert(rt, newNode);
     }
    
      /**
