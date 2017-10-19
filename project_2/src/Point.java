@@ -16,7 +16,7 @@ public class Point  {
     private Scanner sc; //the scanner for the input file
     /**
      * returns a pointer to the used instance of the Data class
-     * @return
+     * @return the data class for this instance of Point
      */
     public Data getData() {
         return d;
@@ -142,7 +142,8 @@ public class Point  {
                 case "regionsearch" : //Found a regional search command
                     x = sc.nextDouble();
                     y = sc.nextDouble();
-                    double h, w;
+                    double h;
+                    double w;
                     h = sc.nextDouble();
                     w = sc.nextDouble();
                     if (h > 0 && w > 0) { //check that parameters are valid
@@ -170,13 +171,13 @@ public class Point  {
             } //end switch
             
         }
-        /**
+        /*
          * gets the BST rectTree.
          * @return the BST implementation for this instance of the class
-         */
+         *
         public BST getBST() {
             return rectTree;
-        }
+        }*/
 
     }  //end of Data class
 } //end of ParseData class

@@ -312,14 +312,16 @@ public class BST {
     /**
      * searches the BST for a node with the given name
      * @param name is the name of the node to find
+     * @return the number of points by that name found
      */
-    public void searchTree(String name) {
+    public int searchTree(String name) {
         setTempArray(search(getRoot(), name));
         if (getTempArray() == null || getTempArray().length == 0) {
             System.out.printf("Point Not Found: %s\n", name);
+            return 0;
         } 
         else {
-            for (int i = 0; i < getTempArray().length; i++) {
+            for (int i = 0; i < tempArray.length; i++) {
                 System.out.print("Point Found: ");
                 System.out.printf(
                     "(%s, %.0f, %.0f)\n",
@@ -327,6 +329,7 @@ public class BST {
                     getTempArray()[i].getX(),
                     getTempArray()[i].getY());
             } 
+            return tempArray.length;
         } 
     }
     
@@ -387,9 +390,13 @@ public class BST {
         System.out.printf("BST size is: %d\n", count);
         return count;
     }
-
-    public boolean isValid(TreeNode t){
-    	return t.isValid(min, max);
+    /**
+     * Checks if a TreeNode is valid.
+     * @param t the node to validate
+     * @return if the node is a valid TreeNode in the worlc range
+     */
+    public boolean isValid(TreeNode t) {
+        return t.isValid(min, max);
     }
     /**
      * performs an in-order traversal starting at the given rt, and prints
