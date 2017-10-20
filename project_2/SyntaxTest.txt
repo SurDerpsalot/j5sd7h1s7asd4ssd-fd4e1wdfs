@@ -2,17 +2,11 @@ insert r_r          1 20
 insert rec        10 30
 insert r_42   1 20
 insert far  200 200
-insert wrong -30 -110
-insert toofar 200304 1029
 dump
 duplicates
 search r_r
 regionsearch   0 0 25 25
-regionsearch   0 0 -1 -1
 remove r_r
-remove TwilightSparkle
-remove 1 19
 remove 10 30
 duplicates
 dump
-unrecognizedcommand

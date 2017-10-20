@@ -151,6 +151,8 @@ public class PRQuadTreeTest extends student.TestCase {
 //        assertEquals(p.getRoot().getSE().getBucket().get(0)
 //                .end.getData().getName(), "newrootSEdupe2");
     }
+
+        
     /**
      * tests the dump method
      */
@@ -297,5 +299,19 @@ public class PRQuadTreeTest extends student.TestCase {
         p.duplicates(p.getRoot());
  
     }
-    
+    /**
+     * tests insertion edge cases
+     */
+    public void testinsertPoint2() {
+        PRQuadTree p = new PRQuadTree();
+        assertNotNull(p.getRoot());     
+        p.insertPoint("NW1", 1.0, 2.0);
+        p.insertPoint("NW2", 1, 8.0);
+        p.insertPoint("NW3", 1, 2.0);
+        p.preDumpQuadTree();
+        p.insertPoint("NW4", 1.0, 2.0);
+        p.insertPoint("NW5", 1.0, 8.0);
+        p.preDumpQuadTree();
+    }
+
 }

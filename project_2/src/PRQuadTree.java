@@ -32,14 +32,14 @@ public class PRQuadTree {
         nodes = 0;
     };
 
-    /**
+    /*
     * PRQuadTree constructor given a BucketNode
     * @param rt  is the root node you want to give the PRQuadTree
-    */
+    *
     public PRQuadTree(BucketNode rt) {
         root = rt;
     };
-
+*/
    ///////////////////////////////////////////////
    // Set values
    ///////////////////////////////////////////////
@@ -168,7 +168,7 @@ public class PRQuadTree {
                     isRepeat = true;
                 }
             }
-            if (isRepeat || count < 3) {
+            if ((isRepeat && rt.bucketList.size() == 1) || count < 3) {
                 return false;
             } 
         }
@@ -186,21 +186,23 @@ public class PRQuadTree {
             double yRange = rt.getYMax() - rt.getYMin();
             double xMidpoint = rt.getXMin() + (xRange / 2);
             double yMidpoint = rt.getYMin() + (yRange / 2);
-            if (newNode.getX() > rt.getXMax() 
+      /*      if (newNode.getX() > rt.getXMax() 
                     || newNode.getX() < rt.getXMin()
                     || newNode.getY() > rt.getYMax() 
                     || newNode.getY() < rt.getYMin()) {
                 inserted = false;
             }
+        */    
             
-            
-            //goes in the NE quadrant
-            else if (newNode.getX() >= xMidpoint && 
-                    newNode.getY() < yMidpoint) { 
+            //goes in the NE quadrant if the origin
+            if ((newNode.getY() == yMidpoint && 
+                    newNode.getX() == xMidpoint) ||
+                    ((newNode.getY() <= yMidpoint && 
+                    newNode.getX() > xMidpoint) )) { 
                 insert(rt.getNE(), newNode);
             }
             //goes in the NW quadrant
-            else if (newNode.getX() < xMidpoint && 
+            else if (newNode.getX() <= xMidpoint && 
                     newNode.getY() < yMidpoint) {
                    //NW corner may have values
                 insert(rt.getNW(), newNode);
@@ -213,7 +215,7 @@ public class PRQuadTree {
             }
             //goes in the SE quadrant
             else if (newNode.getX() >= xMidpoint && 
-                       newNode.getY() >= yMidpoint) {
+                       newNode.getY() > yMidpoint) {
                 insert(rt.getSE(), newNode);
             }
         }
@@ -328,9 +330,9 @@ public class PRQuadTree {
      */
     private boolean deleteSearchRecursive(TreeNode findNode, 
             BucketNode rt) {
-        if (rt == null) {
-            return false;
-        }
+//        if (rt == null) {
+ //           return false;
+  //      }
         boolean deletion = false;
         double xRange = rt.getXMax() - rt.getXMin();
         double yRange = rt.getYMax() - rt.getYMin();
@@ -356,8 +358,10 @@ public class PRQuadTree {
             return false;
         }
         else {            //go to the child that has the right values
-            //west
-            if (findNode.getX() < xMidpoint) {
+            //west 
+            if (findNode.getX() < xMidpoint || 
+                    (findNode.getX() == xMidpoint && 
+                    findNode.getY() < yMidpoint)) {
                //north
                 if (findNode.getY() < yMidpoint) {
                     deletion = deleteSearchRecursive(findNode, rt.getNW());
@@ -368,7 +372,7 @@ public class PRQuadTree {
             }
             else { //east
                 //north
-                if (findNode.getY() < yMidpoint) {
+                if (findNode.getY() <= yMidpoint) {
                     deletion = deleteSearchRecursive(findNode, rt.getNE());
                 }
                 else { //south
@@ -452,7 +456,7 @@ public class PRQuadTree {
             double yRange = rt.getYMax() - rt.getYMin();
             double xMidpoint = rt.getXMin() + (xRange / 2);
             double yMidpoint = rt.getYMin() + (yRange / 2);
-            if (minX < xMidpoint && minY < yMidpoint) {
+            if (minX <= xMidpoint && minY < yMidpoint) {
                 //NW corner may have values
                 nodesInRegion.addAll(regionSearchRecursive(rt.getNW(), 
                         minX, maxX, minY, maxY));
@@ -462,12 +466,12 @@ public class PRQuadTree {
                 nodesInRegion.addAll(regionSearchRecursive(rt.getSW(), 
                         minX, maxX, minY, maxY));
             }
-            if (maxX >= xMidpoint && minY < yMidpoint) {
+            if (maxX >= xMidpoint && minY <= yMidpoint) {
                 //NE corner may have values
                 nodesInRegion.addAll(regionSearchRecursive(rt.getNE(), 
                         minX, maxX, minY, maxY));
             }
-            if (maxX >= xMidpoint && maxY >= yMidpoint) {
+            if (maxX >= xMidpoint && maxY > yMidpoint) {
                 //SE corner may have values
                 nodesInRegion.addAll(regionSearchRecursive(rt.getSE(), 
                         minX, maxX, minY, maxY));
@@ -546,9 +550,9 @@ public class PRQuadTree {
             if (bucketSize == 0) {
                 System.out.print("Empty\n");
             }
-            else if (bucketSize > 3) {
-                System.out.print("error!\n");
-            }
+//            else if (bucketSize > 3) {
+ //               System.out.print("error!\n");
+  //          }
             else
             {
                 for (int i = 0; i < rt.bucketList.size() ; i++)
