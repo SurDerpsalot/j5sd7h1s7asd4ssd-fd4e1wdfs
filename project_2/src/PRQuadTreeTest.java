@@ -3,7 +3,7 @@
 /**
  * This is a test for our PRQuad Tree class
  * @author m1newc and bfin96
- *
+ * @version 1.3
  */
 public class PRQuadTreeTest extends student.TestCase {
 
@@ -95,7 +95,7 @@ public class PRQuadTreeTest extends student.TestCase {
     /**
      * tests insertion
      */
-    public void testinsertPoint(){
+    public void testinsertPoint() {
         PRQuadTree p = new PRQuadTree();
         assertNotNull(p.getRoot());     
         p.insertPoint("newrootNW", 1.0, 2.0);
@@ -257,13 +257,13 @@ public class PRQuadTreeTest extends student.TestCase {
         assertTrue(p.deleteSearch(t));
         p.preDumpQuadTree();
         assertFalse(p.deleteSearch(t));
-        assertEquals(p.regionSearch(0,1024,0,1024), 19);
+        assertEquals(p.regionSearch(0, 1024, 0, 1024), 19);
         assertTrue(p.deleteSearch(t2));
         assertTrue(p.deleteSearch(t3));
-        assertEquals(p.regionSearch(0,1024,0,1024), 17);
+        assertEquals(p.regionSearch(0, 1024, 0, 1024), 17);
         TreeNode t4 = new TreeNode("NWdupe2", 1.0, 2.0); 
         assertTrue(p.deleteSearch(t4));
-        p.duplicates(p.getRoot());
+        p.findDuplicates();
     }
     /**
      * more advanced duplication tests
@@ -272,6 +272,7 @@ public class PRQuadTreeTest extends student.TestCase {
         PRQuadTree p = new PRQuadTree();
         p.duplicates(p.getRoot());
         p.insertPoint("NWdupe", 1.0, 2.0);
+        assertEquals(p.getRoot().getBucket().size(), 1);
         p.insertPoint("NW2", 1.0, 22.0);
         p.insertPoint("NW2", 1.0, 22.0);
         p.insertPoint("NW3", 1.0, 23.0);

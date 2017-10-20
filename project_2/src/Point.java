@@ -122,7 +122,7 @@ public class Point  {
                         x = sc.nextDouble();
                         y = sc.nextDouble();
                         if (quadTree.deleteSearch(new TreeNode("", x, y))) {
-                            rectTree.remove(quadTree.deletedTreeNode);                            
+                            rectTree.remove(quadTree.deletedTreeNode);
                         }
                         else {
                             System.out.print("Point Rejected: ");

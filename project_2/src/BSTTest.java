@@ -153,9 +153,9 @@ public class BSTTest extends student.TestCase {
         newTree.insert(newTree.getRoot(), newTree.getTemp());
         newTree.setTempNode("aanode", 3, 4);
         newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.remove("ynode");
         newTree.remove("cnode");
         newTree.remove(3, 4);
-        newTree.remove("ynode");
         newTree.remove("qnode");
         newTree.remove("znode");
         newTree.remove("anode");
@@ -163,6 +163,53 @@ public class BSTTest extends student.TestCase {
         newTree.remove(3, 4);
         newTree.remove(1, 2);
         newTree.remove(1, 2);
+        newTree.setRootNode("RD", 3, 3);
+        newTree.setTempNode("TS", 1, 1);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.setTempNode("FS", 2, 2);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.setTempNode("AJ", 4, 4);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.setTempNode("PP", 6, 6);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        TreeNode removal1 = new TreeNode("TS", 1, 1);
+        TreeNode removal2 = new TreeNode("FS", 2, 2);
+        TreeNode removal3 = new TreeNode("RD", 3, 3);
+        TreeNode removal4 = new TreeNode("AJ", 4, 4);
+        TreeNode removal5 = new TreeNode("PP", 6, 6);
+        TreeNode removal6 = new TreeNode(null, 0, 0);
+        newTree.isValid(removal1);
+        newTree.remove(removal2);
+        newTree.remove(removal1);
+        newTree.remove(removal5);
+        newTree.remove(removal4);
+        newTree.remove(removal3);
+        newTree.remove(removal6);
+        newTree.setRootNode(null, 0, 0);
+        newTree.treeDump();
+        newTree.searchTree("TS");
+        newTree.remove("RD");
+        newTree.setTempNode("PP", 6, 6);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.remove("PP");
+        newTree.setRootNode("hold", 0, 0);
+        newTree.setTempNode("PP", 6, 6);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.setRootNode(null, 0, 0);
+        newTree.remove(6, 6);
+        newTree.setTempNode("PP", 6, 6);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.setRootNode(null);
+        newTree.remove(6, 6);
+        newTree.remove(removal6);
+        newTree.setRootNode("g", 0, 0);
+        newTree.setTempNode("c", 6, 6);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.remove("g");
+        newTree.setTempNode("a", 10, 10);
+        newTree.insert(newTree.getRoot(), newTree.getTemp());
+        newTree.remove("c");
+        newTree.remove("a");
         assertTrue(newTree.isEmpty());
     }
     
@@ -228,7 +275,10 @@ public class BSTTest extends student.TestCase {
         TreeNode t = new TreeNode("root", 1, 2);
         TreeNode leftChild = new TreeNode("lefty", 3, 4);
         TreeNode rightChild = new TreeNode("righty", 5, 6);
+        TreeNode inval = new TreeNode("3Dawg", 10, 10);
+        assertFalse(inval.isValid(0, 30));
         t.setLeft(leftChild);
+        t.setValue(null);
         assertEquals(t.getLeft(), leftChild);
         t.setRight(rightChild);
         assertEquals(t.getRight(), rightChild);
@@ -246,8 +296,13 @@ public class BSTTest extends student.TestCase {
         rightChild.setValue(leftChild);
         assertEquals(leftChild.getName().compareTo(rightChild.getName()), 0);
         assertTrue(t.isValid(0, 1024));
-        TreeNode failure = new TreeNode("fail", -23, 10230);
+        TreeNode failure = new TreeNode("fail", 3, 10230);
+        TreeNode failure2 = new TreeNode("fail", 20, 10);
         assertFalse(failure.isValid(0, 1024));
+        assertTrue(failure.isValid(3, 10240));
+        assertFalse(failure2.isValid(15, 30));
+        assertFalse(failure2.isValid(0, 0));
+        assertFalse(failure2.isValid(30, 5));
     }
     
 }

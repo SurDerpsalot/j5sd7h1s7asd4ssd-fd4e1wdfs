@@ -190,7 +190,7 @@ public class PRQuadTree {
                     || newNode.getX() < rt.getXMin()
                     || newNode.getY() > rt.getYMax() 
                     || newNode.getY() < rt.getYMin()) {
-                //TODO: fixthis
+                inserted = false;
             }
             
             
@@ -499,8 +499,8 @@ public class PRQuadTree {
                 insert(rt, rt.bucketList.get(i).getData(j));
             }
             rt.bucketList.remove(i);
-       }
-       insert(rt, newNode);
+        }
+        insert(rt, newNode);
     }
    
      /**
@@ -638,6 +638,11 @@ public class PRQuadTree {
         private double yMax;
         private boolean isInternalNode;
         
+        /**
+         * This function counts the number of TreeNodes held in the current
+         * BucketNode
+         * @return the number of TreeNodes in the BucketNode
+         */
         public int getTreeNodeCount() {
             int count = bucketList.size();
             for (int i = 0; i < bucketList.size(); i++) {
@@ -769,14 +774,6 @@ public class PRQuadTree {
         private PointNode link;
      
         /**
-         * This is the basic constructor of PointNode
-         */
-        public PointNode()
-        {
-            link = null;
-            data = null;
-        }    
-        /**
          * This constructor builds a non-empty PointNode
          * @param node is the TreeNode to be stored in the LinkedList
          * @param ptr is the pointer to the next element in the LinkedList
@@ -793,15 +790,7 @@ public class PRQuadTree {
         public void setLink(PointNode ptr)
         {
             link = ptr;
-        }    
-        /**
-         * This function sets the TreeNode in the current node  
-         * @param node the TreeNode to be stored
-         */
-        public void setData(TreeNode node)
-        {
-            data = node;
-        }    
+        } 
         /**
          * This function gets the link to next node in the LinkedList
          * @return the link to the next node

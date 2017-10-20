@@ -12,7 +12,7 @@ public class Point1Test extends student.TestCase {
     public void testMain() {
         Point1 test = new Point1();
         String[] ourArguments = { "SyntaxTest.txt" };
-        Point1.main(ourArguments);
+        test.main(ourArguments);
         assertEquals(ourArguments[0].compareTo("SyntaxTest.txt"), 0);
         assertNotNull(test);
     }

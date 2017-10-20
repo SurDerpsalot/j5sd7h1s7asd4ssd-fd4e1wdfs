@@ -335,7 +335,7 @@ public class BST {
      * value set specified.
      * 
      * @param rt  is the current TreeNode branch
-     * @param name is the String that matches on the TreeNode to be removed
+     * @param deleteNode is the TreeNode to be removed
      * @return the child after removal of the names TreeNode.
      */
     private TreeNode removeByNode(TreeNode rt, TreeNode deleteNode) {
