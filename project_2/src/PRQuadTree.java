@@ -196,7 +196,7 @@ public class PRQuadTree {
             
             //goes in the NE quadrant
             else if (newNode.getX() >= xMidpoint && 
-                    newNode.getY() < yMidpoint) {
+                    newNode.getY() < yMidpoint) { 
                 insert(rt.getNE(), newNode);
             }
             //goes in the NW quadrant
@@ -208,7 +208,7 @@ public class PRQuadTree {
             //goes in the SW quadrant
             else if (newNode.getX() < xMidpoint && 
                        newNode.getY() >= yMidpoint) {
-                   
+
                 insert(rt.getSW(), newNode);
             }
             //goes in the SE quadrant
@@ -250,55 +250,6 @@ public class PRQuadTree {
             createNewLevel(rt, newNode);
         }
     }
-
-    /**
-    * Returns true if the current level in the PRQuad tree 
-    * is able to contract its child
-    * @param rt is the current level of the PRQuad tree
-    * @return if it is contractible
-    */
-    private boolean isContractible(BucketNode rt) {
-        if (!rt.getIsInternalNode()) {
-            return false;
-        }
-        int numberofChildren = 0;
-        int numberofNodes = 0;
-        if (rt.getNE() != null && rt.getNE().getTreeNodeCount() > 0) {
-            numberofChildren++;
-            numberofNodes = numberofNodes + rt.getNE().getTreeNodeCount();
-        }
-        if (rt.getNW() != null && rt.getNW().getTreeNodeCount() > 0) {
-            numberofChildren++;
-            numberofNodes = numberofNodes + rt.getNW().getTreeNodeCount();
-        }
-        if (rt.getSE() != null && rt.getSE().getTreeNodeCount() > 0) {
-            numberofChildren++;
-            numberofNodes = numberofNodes + rt.getSE().getTreeNodeCount();
-        }
-        if (rt.getSW() != null && rt.getSW().getTreeNodeCount() > 0) {
-            numberofChildren++;
-            numberofNodes = numberofNodes + rt.getSW().getTreeNodeCount();
-        }
-        return (numberofChildren == 1 || numberofNodes <= 3);
-    }
-    /**
-    * Contracts the tree at a given root.
-    * @param rt is the root node from which you check if it can contract
-    */
-    public void contractTreeAtNode(BucketNode rt) {
-        if (rt.getNW() != null) {
-            rt = rt.getNW();
-        }
-        else if (rt.getNE() != null) {
-            rt = rt.getNE();
-        }
-        else if (rt.getSE() != null) {
-            rt = rt.getSE();
-        }
-        else if (rt.getSW() != null) {
-            rt = rt.getSW();
-        }
-    }
     /**
     * searches for the first node with the characteristics from findNode
     * and deletes it
@@ -308,16 +259,67 @@ public class PRQuadTree {
     public boolean deleteSearch(TreeNode findNode) {
         if (deleteSearchRecursive(findNode, root)) {
            // System.out.print("Found");
-            if (isContractible(root)) {
-                contractTreeAtNode(root);
-            }
+            root = collapseTree(root);
             return true;
         }
-        else {
-            //System.out.print("Not Found");            
+        else {            
             return false;
         }
     }
+    
+    /**
+     * This function recursively collapses the tree to have up to 3 unique
+     * points per BucketNode
+     * 
+     * @param rt is the candidate node to be collapsed
+     * @return either the collapsed node, or an unchanged node
+     */
+    public BucketNode collapseTree(BucketNode rt)
+    {
+        BucketNode newnode = new BucketNode(rt.getXMin(),
+                rt.getXMax(), rt.getYMin(), rt.getYMax());
+        if (rt.getIsInternalNode())
+        {
+            if (rt.getNE().getIsInternalNode() ||
+                rt.getNW().getIsInternalNode() ||
+                rt.getSE().getIsInternalNode() ||
+                rt.getSW().getIsInternalNode()) 
+            {
+                rt.nE = collapseTree(rt.getNE());
+                rt.nW = collapseTree(rt.getNW());
+                rt.sE = collapseTree(rt.getSE());
+                rt.sW = collapseTree(rt.getSW());
+            }
+            if (!rt.getNE().getIsInternalNode() &&
+                !rt.getNW().getIsInternalNode() &&
+                !rt.getSE().getIsInternalNode() &&
+                !rt.getSW().getIsInternalNode())
+            { 
+                int numNodes = rt.getNE().bucketList.size() +
+                            rt.getNW().bucketList.size() +
+                            rt.getSW().bucketList.size() +
+                            rt.getSE().bucketList.size();
+                if (numNodes <= 3) {
+                    for (int i = 0; i < rt.getNE().bucketList.size(); i++) {
+                        newnode.bucketList.add(rt.getNE().bucketList.get(i));
+                    }
+                    for (int i = 0; i < rt.getNW().bucketList.size(); i++) {
+                        newnode.bucketList.add(rt.getNW().bucketList.get(i));
+                    }
+                    for (int i = 0; i < rt.getSE().bucketList.size(); i++) {
+                        newnode.bucketList.add(rt.getSE().bucketList.get(i));
+                    }
+                    for (int i = 0; i < rt.getSW().bucketList.size(); i++) {
+                        newnode.bucketList.add(rt.getSW().bucketList.get(i));
+                    }
+                    rt = newnode;
+                }
+            }    
+        }
+        return rt;
+    }
+
+      
     /**
      * the recursive search for a node to delete
      * @param findNode is the value set to delete
@@ -344,6 +346,10 @@ public class PRQuadTree {
                        findNode.getY()) {
                     deletedTreeNode = rt.bucketList.get(i).getData(j);
                     rt.bucketList.get(i).deleteAtPos(j);
+                    if (rt.bucketList.get(i).getData() == null)
+                    {
+                        rt.bucketList.remove(i);
+                    }
                     return true;
                 }
             }                   
@@ -369,9 +375,6 @@ public class PRQuadTree {
                     deletion = deleteSearchRecursive(findNode, rt.getSE());
                 }
             }
-        }
-        if (isContractible(rt)) {
-            contractTreeAtNode(rt);
         }
         return deletion;
     }
@@ -524,9 +527,9 @@ public class PRQuadTree {
             System.out.print("  ");
         }
         System.out.print("Node at " 
-               + rt.getXMin() + ", " 
-               + rt.getYMin() + ", "
-               + (rt.getXMax() - rt.getXMin()) + ": ");
+               + (int) rt.getXMin() + ", " 
+               + (int) rt.getYMin() + ", "
+               + (int) (rt.getXMax() - rt.getXMin()) + ": ");
         nodes = nodes + 1;
         if (rt.getIsInternalNode()) {
             System.out.print("Internal\n");
@@ -559,9 +562,9 @@ public class PRQuadTree {
                         System.out.print("("
                                 + rt.bucketList.get(i).getData(j).getName()
                                 + ", "
-                                + rt.bucketList.get(i).getData(j).getX()
+                                + (int) rt.bucketList.get(i).getData(j).getX()
                                 + ", "
-                                + rt.bucketList.get(i).getData(j).getY()
+                                + (int) rt.bucketList.get(i).getData(j).getY()
                                 + ")");
                     }
                 }
@@ -611,9 +614,10 @@ public class PRQuadTree {
                 if (rt.bucketList.get(i).getSize() > 1)
                 {
                     System.out.println("("
-                            + rt.bucketList.get(i).getData().getX()
+                            + (int) rt.bucketList.get(i).getData().getX()
                             + ", "
-                            + rt.bucketList.get(i).getData().getY() + ")");
+                            + (int) rt.bucketList.get(i).getData().getY() 
+                            + ")");
                 }
             }  
         }
@@ -877,7 +881,14 @@ public class PRQuadTree {
             }
             else if (pos == 0) 
             {
-                start = start.getLink();
+                if (size == 1)
+                {
+                    start = null;
+                }
+                else
+                {
+                    start = start.getLink();
+                }
             }
             else if (pos + 1 == size) 
             { //last element
@@ -911,6 +922,10 @@ public class PRQuadTree {
          */
         public TreeNode getData()
         {
+            if (start == null)
+            {
+                return null;
+            }
             return start.getData();
         }
         /**

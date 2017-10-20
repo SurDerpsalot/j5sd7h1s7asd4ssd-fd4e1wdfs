@@ -121,14 +121,16 @@ public class Point  {
                     if (sc.hasNextDouble()) {
                         x = sc.nextDouble();
                         y = sc.nextDouble();
+                        //search by coordinate
                         if (quadTree.deleteSearch(new TreeNode("", x, y))) {
                             rectTree.remove(quadTree.deletedTreeNode);
+                            quadTree.deleteSearch(rectTree.deletedNode);
                         }
                         else {
                             System.out.print("Point Rejected: ");
                             System.out.printf("(%.0f, %.0f)\n", x, y); 
                         }
-                        
+                         
                     } 
                     else {
                         name = sc.next();
